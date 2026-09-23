@@ -1,0 +1,27 @@
+name: Compilar EXE de PDF Pager
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar Dependencias
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Empaquetar con PyInstaller
+        run: pyinstaller --onefile --noconsole pdfpagerQT.py
+
+      - name: Subir el EXE como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDF-Pager-Windows
+          path: dist/pdfpagerQT.exe
